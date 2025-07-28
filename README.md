@@ -35,9 +35,10 @@ settings.
 
 ## Packaging for Windows
 
-Install `pywin32` and `pyinstaller` and then run `build_all.bat` to create
-the service and configuration GUI executables. The script places everything
-in a new `dist` directory.
+Install `pywin32`, `pyinstaller` and (optionally) Inno Setup if you wish to
+create a self-contained installer. Then run `build_all.bat` which builds the
+executables and, when Inno Setup is available, produces an installer in the
+`dist` directory.
 
 ```bash
 pip install pywin32 pyinstaller
@@ -50,6 +51,10 @@ The `dist` directory will contain:
 - `WeChatDaemon_Config.exe` – configuration GUI
 - `install_service.bat` – registers and starts the service
 - `uninstall_service.bat` – stops and removes the service
+If Inno Setup was available, you'll also get `WeChatDaemon_Installer.exe` which
+copies the files into `C:\Program Files\WeChatDaemon`, installs the service
+and creates shortcuts.
 
-Run `install_service.bat` to install the daemon or `uninstall_service.bat`
-to remove it.
+Run `install_service.bat` to manually register the daemon or
+double‑click the generated installer for a one-step setup. Use
+`uninstall_service.bat` or the Windows "Add/Remove Programs" entry to remove it.
