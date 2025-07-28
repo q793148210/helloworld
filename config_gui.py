@@ -4,6 +4,8 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from quantum_messaging import QuantumMessagingAPI
 
+from quantum_messaging import QuantumMessagingAPI
+
 CONFIG_FILE = "config.json"
 DEFAULT_CONFIG = {
     "webhook_url": "",
@@ -74,8 +76,12 @@ class ConfigApp(tk.Tk):
         self.time_var = tk.StringVar(value=self.cfg.get("schedule", [{}])[0].get("time", "09:00"))
         ttk.Entry(frame, textvariable=self.time_var, width=10).grid(row=5, column=1, sticky="w")
 
-        ttk.Button(frame, text="Save", command=self.save).grid(row=6, column=1, pady=5, sticky="e")
-        ttk.Button(frame, text="Send Test", command=self.send_test).grid(row=6, column=0, pady=5, sticky="w")
+
+        btn_frame = ttk.Frame(frame)
+        btn_frame.grid(row=5, column=1, pady=5, sticky="e")
+        ttk.Button(btn_frame, text="Save", command=self.save).grid(row=0, column=0, padx=(0,5))
+        ttk.Button(btn_frame, text="Test", command=self.send_test).grid(row=0, column=1)
+
 
     def save(self):
         self.cfg["webhook_url"] = self.webhook_var.get()
@@ -100,6 +106,17 @@ class ConfigApp(tk.Tk):
         else:
             messagebox.showinfo(title="Success", message="Test message sent")
 
+
+    def send_test(self):
+        """Send a one-time test message using current form values."""
+        api = QuantumMessagingAPI(
+            self.webhook_var.get(), self.key_var.get(), proxies=None
+        )
+        result = api.send_text_message(self.msg_var.get())
+        if isinstance(result, dict) and result.get("error"):
+            messagebox.showerror(title="Error", message="测试失败: " + result["error"])
+        else:
+            messagebox.showinfo(title="Success", message="测试消息已发送")
 
 
 if __name__ == "__main__":
