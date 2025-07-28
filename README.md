@@ -1,4 +1,4 @@
-# Hello World
+# QuantumEasySend
 
 This repository includes a simple C program and a Python daemon for sending
 scheduled messages via Quantum Messaging.
