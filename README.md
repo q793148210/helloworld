@@ -32,6 +32,8 @@ python3 config_gui.py
 ```
 
 Changes are written to `config.json` which the daemon reads automatically.
+Use the **Test** button to send a one-time test message with the current
+settings.
 
 ## Packaging for Windows
 
