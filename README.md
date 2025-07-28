@@ -5,7 +5,6 @@ scheduled messages via Quantum Messaging.
 
 ## Files
 
-- `hello.c` – example C source.
 - `quantum_messaging.py` – library for sending messages.
 - `daemon.py` – reads `config.json` and sends messages at the configured times.
 - `config_gui.py` – simple GUI for editing the configuration file.
