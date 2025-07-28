@@ -1,3 +1,4 @@
+
 """Windows service wrapper for the messaging daemon."""
 
 import threading
@@ -6,10 +7,12 @@ import win32service
 import win32event
 import servicemanager
 
+
 from daemon import run_daemon
 
 
 class WeChatDaemonService(win32serviceutil.ServiceFramework):
+
     _svc_name_ = "WeChatDaemon"
     _svc_display_name_ = "WeChat Quantum Messaging Daemon"
 

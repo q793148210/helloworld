@@ -1,3 +1,7 @@
+
+This project contains Python scripts for building a Windows service.
+Use `build_all.bat` to package the service and its configuration tool.
+
 # Hello World
 
 This repository includes a simple C program and a Python daemon for sending
@@ -52,4 +56,4 @@ The `dist` directory will contain:
 - `uninstall_service.bat` – stops and removes the service
 
 Run `install_service.bat` to install the daemon or `uninstall_service.bat`
-to remove it.
+

@@ -1,3 +1,4 @@
+
 import json
 import os
 import tkinter as tk
@@ -122,3 +123,4 @@ class ConfigApp(tk.Tk):
 if __name__ == "__main__":
     app = ConfigApp()
     app.mainloop()
+
