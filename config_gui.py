@@ -130,6 +130,7 @@ class ConfigApp(tk.Tk):
             self.key_var.get(),
             proxies=self.proxies_var.get().strip() or None,
         )
+
         msg = self.msg_var.get()
         m_type = self.mention_var.get()
         m_list = [m.strip() for m in self.mention_list_var.get().split(',') if m.strip()]
@@ -139,6 +140,7 @@ class ConfigApp(tk.Tk):
             result = api.send_text_message_with_mention(msg, 1)
         else:
             result = api.send_text_message_with_mention(msg, m_type, m_list)
+
         if isinstance(result, dict) and result.get("error"):
             messagebox.showerror(title="Error", message="测试失败: " + result["error"])
         else:
