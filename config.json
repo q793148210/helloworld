@@ -1,0 +1,9 @@
+{
+  "webhook_url": "",
+  "key": "",
+  "proxies": null,
+  "message": "Hello from Quantum Messaging",
+  "schedule": [
+    {"days": [0, 2], "time": "09:00"}
+  ]
+}
