@@ -16,6 +16,8 @@ DEFAULT_CONFIG = {
     "schedule": [
         {"days": [0, 2], "time": "09:00"}  # Monday=0, Wednesday=2
     ],
+    "mention_type": 0,
+    "mention_list": [],
 }
 
 
@@ -25,7 +27,14 @@ def load_config():
             json.dump(DEFAULT_CONFIG, f, indent=2)
         return DEFAULT_CONFIG
     with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+        cfg = json.load(f)
+        if "proxies" not in cfg:
+            cfg["proxies"] = DEFAULT_CONFIG["proxies"]
+        if "mention_type" not in cfg:
+            cfg["mention_type"] = DEFAULT_CONFIG["mention_type"]
+        if "mention_list" not in cfg:
+            cfg["mention_list"] = DEFAULT_CONFIG["mention_list"]
+        return cfg
 
 
 def message_due(config, now, sent_flags):
@@ -52,7 +61,14 @@ def run_daemon(stop_event=None):
         )
         now = datetime.now()
         if message_due(config, now, sent_flags):
-            api.send_text_message(config.get("message", ""))
+            msg = config.get("message", "")
+            m_type = config.get("mention_type", 0)
+            if m_type == 0:
+                api.send_text_message(msg)
+            elif m_type == 1:
+                api.send_text_message_with_mention(msg, 1)
+            else:
+                api.send_text_message_with_mention(msg, m_type, config.get("mention_list", []))
         for _ in range(30):
             if stop_event and getattr(stop_event, "is_set", lambda: False)():
                 break

@@ -23,11 +23,16 @@ take effect automatically.
 
 ## Configuration GUI
 
-Run the GUI to update the webhook URL, key, proxies, schedule and message text:
+Run the GUI to update the webhook URL, key, proxies, schedule and message text.
+You can also configure whether to mention everyone or a list of specific
+contacts when messages are sent:
 
 ```bash
 python3 config_gui.py
 ```
+
+For fixed mentions, enter comma-separated mobile numbers in the list field when
+selecting "@固定人".
 
 Changes are written to `config.json` which the daemon reads automatically.
 Use the **Test** button to send a one-time test message with the current
