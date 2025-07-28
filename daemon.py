@@ -39,9 +39,10 @@ def message_due(config, now, sent_flags):
     return False
 
 
-def main():
+def run_daemon(stop_event=None):
+    """Run the messaging loop until ``stop_event`` is set."""
     sent_flags = {}
-    while True:
+    while not (stop_event and getattr(stop_event, "is_set", lambda: False)()):
         config = load_config()
         api = QuantumMessagingAPI(
             config.get("webhook_url"),
@@ -51,7 +52,19 @@ def main():
         now = datetime.now()
         if message_due(config, now, sent_flags):
             api.send_text_message(config.get("message", ""))
-        time.sleep(30)
+        for _ in range(30):
+            if stop_event and getattr(stop_event, "is_set", lambda: False)():
+                break
+            time.sleep(1)
+
+
+def main():
+    """Entry point for running the daemon as a regular script."""
+    class Dummy:
+        def is_set(self):
+            return False
+
+    run_daemon(Dummy())
 
 
 if __name__ == "__main__":
