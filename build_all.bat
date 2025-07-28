@@ -1,4 +1,5 @@
 @echo off
+
 setlocal enabledelayedexpansion
 
 rem === Set working directory to script's location ===
@@ -6,6 +7,7 @@ set SCRIPT_DIR=%~dp0
 cd /d "%SCRIPT_DIR%"
 
 rem === Create dist output directory ===
+
 if not exist dist (
     mkdir dist
 )
@@ -39,9 +41,11 @@ echo 🧪 Creating install_service.bat ...
 (
     echo @echo off
     echo cd /d %%~dp0
+
     echo WeChatDaemon_Setup.exe install
     echo WeChatDaemon_Setup.exe start
 ) > dist\install_service.bat
+
 
 rem === Create service uninstall script uninstall_service.bat ===
 echo.
@@ -49,11 +53,13 @@ echo 🧪 Creating uninstall_service.bat ...
 (
     echo @echo off
     echo cd /d %%~dp0
+
     echo WeChatDaemon_Setup.exe stop
     echo WeChatDaemon_Setup.exe remove
 ) > dist\uninstall_service.bat
 
 echo.
+
 echo ✅ Build complete! All files are in the dist\ folder.
 endlocal
 exit /b 0
@@ -62,3 +68,4 @@ exit /b 0
 echo ❌ Build failed with error level %ERRORLEVEL%.
 endlocal
 exit /b %ERRORLEVEL%
+
