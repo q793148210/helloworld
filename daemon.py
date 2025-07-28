@@ -5,7 +5,8 @@ from datetime import datetime
 
 from quantum_messaging import QuantumMessagingAPI
 
-CONFIG_FILE = "config.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
 
 DEFAULT_CONFIG = {
     "webhook_url": "",

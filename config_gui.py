@@ -4,9 +4,8 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from quantum_messaging import QuantumMessagingAPI
 
-from quantum_messaging import QuantumMessagingAPI
-
-CONFIG_FILE = "config.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
 DEFAULT_CONFIG = {
     "webhook_url": "",
     "key": "",
@@ -94,23 +93,13 @@ class ConfigApp(tk.Tk):
         save_config(self.cfg)
 
         messagebox.showinfo(title="Saved", message="配置已保存")
-    def send_test(self):
-        api = QuantumMessagingAPI(
-            self.webhook_var.get(),
-            self.key_var.get(),
-            proxies=self.proxies_var.get().strip() or None,
-        )
-        result = api.send_text_message(self.msg_var.get())
-        if isinstance(result, dict) and result.get("error"):
-            messagebox.showerror(title="Error", message=result["error"])
-        else:
-            messagebox.showinfo(title="Success", message="Test message sent")
-
 
     def send_test(self):
         """Send a one-time test message using current form values."""
         api = QuantumMessagingAPI(
-            self.webhook_var.get(), self.key_var.get(), proxies=None
+            self.webhook_var.get(),
+            self.key_var.get(),
+            proxies=self.proxies_var.get().strip() or None,
         )
         result = api.send_text_message(self.msg_var.get())
         if isinstance(result, dict) and result.get("error"):
