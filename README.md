@@ -12,9 +12,7 @@ scheduled messages via Quantum Messaging.
 - `config.json` – configuration file created on first run if missing.
 
 ## Running the daemon
-
-Edit `config.json` to provide your webhook URL and key. The default schedule
-sends a message every Monday and Wednesday at 09:00. Start the daemon with:
+Edit `config.json` to provide your webhook URL, key, and optional proxies. The default schedule sends a message every Monday and Wednesday at 09:00. Start the daemon with:
 
 ```bash
 python3 daemon.py
@@ -25,7 +23,7 @@ take effect automatically.
 
 ## Configuration GUI
 
-Run the GUI to update the webhook URL, key, schedule and message text:
+Run the GUI to update the webhook URL, key, proxies, schedule and message text:
 
 ```bash
 python3 config_gui.py
