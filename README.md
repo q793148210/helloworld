@@ -38,7 +38,12 @@ settings.
 Install `pywin32`, `pyinstaller` and (optionally) Inno Setup if you wish to
 create a self-contained installer. Then run `build_all.bat` which builds the
 executables and, when Inno Setup is available, produces an installer in the
-`dist` directory.
+`dist` directory. If you encounter a `ModuleNotFoundError` for
+`win32timezone`, ensure the pywin32 post-install script has been executed:
+
+```bash
+python -m pywin32_postinstall -install
+```
 
 ```bash
 pip install pywin32 pyinstaller

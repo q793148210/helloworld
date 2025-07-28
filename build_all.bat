@@ -4,6 +4,9 @@ if not exist dist (
     mkdir dist
 )
 
+rem ensure pywin32 modules are properly installed
+python -m pywin32_postinstall -install >nul 2>&1
+
 rem build service executable
 pyinstaller --onefile --noconsole --distpath dist --workpath build --name WeChatDaemon_Setup win_service.py
 if %ERRORLEVEL% NEQ 0 goto :error
