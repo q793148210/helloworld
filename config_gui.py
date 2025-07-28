@@ -2,9 +2,9 @@ import json
 import os
 import tkinter as tk
 from tkinter import ttk, messagebox
+from quantum_messaging import QuantumMessagingAPI
 
 CONFIG_FILE = "config.json"
-
 DEFAULT_CONFIG = {
     "webhook_url": "",
     "key": "",
@@ -20,7 +20,10 @@ def load_config():
             json.dump(DEFAULT_CONFIG, f, indent=2)
         return DEFAULT_CONFIG
     with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+        cfg = json.load(f)
+        if "proxies" not in cfg:
+            cfg["proxies"] = DEFAULT_CONFIG["proxies"]
+        return cfg
 
 
 def save_config(data):
@@ -49,14 +52,17 @@ class ConfigApp(tk.Tk):
         ttk.Label(frame, text="Key:").grid(row=1, column=0, sticky="e")
         self.key_var = tk.StringVar(value=self.cfg.get("key", ""))
         ttk.Entry(frame, textvariable=self.key_var, width=40).grid(row=1, column=1)
+        ttk.Label(frame, text="Proxies:").grid(row=2, column=0, sticky="e")
+        self.proxies_var = tk.StringVar(value=self.cfg.get("proxies") or "")
+        ttk.Entry(frame, textvariable=self.proxies_var, width=40).grid(row=2, column=1)
 
-        ttk.Label(frame, text="Message:").grid(row=2, column=0, sticky="e")
+        ttk.Label(frame, text="Message:").grid(row=3, column=0, sticky="e")
         self.msg_var = tk.StringVar(value=self.cfg.get("message", ""))
-        ttk.Entry(frame, textvariable=self.msg_var, width=40).grid(row=2, column=1)
+        ttk.Entry(frame, textvariable=self.msg_var, width=40).grid(row=3, column=1)
 
-        ttk.Label(frame, text="Send Days:").grid(row=3, column=0, sticky="ne")
+        ttk.Label(frame, text="Send Days:").grid(row=4, column=0, sticky="ne")
         day_frame = ttk.Frame(frame)
-        day_frame.grid(row=3, column=1, sticky="w")
+        day_frame.grid(row=4, column=1, sticky="w")
         self.day_vars = []
         days_selected = set(self.cfg.get("schedule", [{}])[0].get("days", []))
         for idx, name in enumerate(self.DAYS):
@@ -64,20 +70,36 @@ class ConfigApp(tk.Tk):
             self.day_vars.append(var)
             ttk.Checkbutton(day_frame, text=name, variable=var).grid(row=0, column=idx, sticky="w")
 
-        ttk.Label(frame, text="Time (HH:MM):").grid(row=4, column=0, sticky="e")
+        ttk.Label(frame, text="Time (HH:MM):").grid(row=5, column=0, sticky="e")
         self.time_var = tk.StringVar(value=self.cfg.get("schedule", [{}])[0].get("time", "09:00"))
-        ttk.Entry(frame, textvariable=self.time_var, width=10).grid(row=4, column=1, sticky="w")
+        ttk.Entry(frame, textvariable=self.time_var, width=10).grid(row=5, column=1, sticky="w")
 
-        ttk.Button(frame, text="Save", command=self.save).grid(row=5, column=1, pady=5, sticky="e")
+        ttk.Button(frame, text="Save", command=self.save).grid(row=6, column=1, pady=5, sticky="e")
+        ttk.Button(frame, text="Send Test", command=self.send_test).grid(row=6, column=0, pady=5, sticky="w")
 
     def save(self):
         self.cfg["webhook_url"] = self.webhook_var.get()
         self.cfg["key"] = self.key_var.get()
         self.cfg["message"] = self.msg_var.get()
         days = [i for i, v in enumerate(self.day_vars) if v.get()]
+        proxies = self.proxies_var.get().strip()
+        self.cfg["proxies"] = proxies if proxies else None
         self.cfg["schedule"] = [{"days": days, "time": self.time_var.get()}]
         save_config(self.cfg)
+
         messagebox.showinfo(title="Saved", message="配置已保存")
+    def send_test(self):
+        api = QuantumMessagingAPI(
+            self.webhook_var.get(),
+            self.key_var.get(),
+            proxies=self.proxies_var.get().strip() or None,
+        )
+        result = api.send_text_message(self.msg_var.get())
+        if isinstance(result, dict) and result.get("error"):
+            messagebox.showerror(title="Error", message=result["error"])
+        else:
+            messagebox.showinfo(title="Success", message="Test message sent")
+
 
 
 if __name__ == "__main__":
