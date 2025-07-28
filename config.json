@@ -5,5 +5,7 @@
   "message": "Hello from Quantum Messaging",
   "schedule": [
     {"days": [0, 2], "time": "09:00"}
-  ]
+  ],
+  "mention_type": 0,
+  "mention_list": []
 }
